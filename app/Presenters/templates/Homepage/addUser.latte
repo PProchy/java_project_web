@@ -1,0 +1,57 @@
+{block content}
+
+    <form n:name="userForm">
+
+        <div class="row justify-content-center my-5">
+
+            <div n:foreach="$form->errors as $error"
+                    class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{$error}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="col-6">
+
+                <div class="form-group row">
+                    {label name, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="name" class="form-control" type="text">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {label surname, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="surname" class="form-control" type="text">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {label birth, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="birth" class="form-control" type="date">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {label address_id, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <select n:name="address_id" class="form-control"></select>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <input n:name="send" type="submit" class="btn btn-success">
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+{/block}
+
+

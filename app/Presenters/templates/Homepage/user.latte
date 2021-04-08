@@ -1,0 +1,50 @@
+{block content}
+
+    <div class="row justify-content-center">
+        <div class="col-10">
+
+            <h2 class="py-3">Uživatelé</h2>
+
+            <div class="py-2">
+                <a class="btn btn-success" n:href="Homepage:addUser">Přidat</a>
+            </div>
+
+            <table class="table py-5">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Jméno</th>
+                    <th scope="col">Příjmení</th>
+                    <th scope="col">Narození</th>
+                    <th scope="col">Adresa</th>
+                    <th scope="col">Upravit</th>
+                    <th scope="col">Smazat</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $people as $item}
+                    <tr>
+                        <td>{$item->id}</td>
+                        <td>{$item->name}</td>
+                        <td>{$item->surname}</td>
+                        <td>{$item->birth|date: '%d.%m.%Y'}</td>
+                        <td>{$item->address_id}</td>
+                        <td><a class="btn btn-info" n:href="Homepage:addUser $item->id">O</a></td>
+                        <td><a class="btn btn-danger" n:href="Homepage:deleteUser $item->id">X</a></td>
+                    </tr>
+
+                {/foreach}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+
+
+
+
+{/block}
+
+

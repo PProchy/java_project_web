@@ -1,0 +1,50 @@
+{block content}
+
+    <div class="row justify-content-center">
+        <div class="col-10">
+
+            <h2 class="py-3">Knihy</h2>
+
+            <div class="py-2">
+                <a class="btn btn-success" n:href="Homepage:addBook">Přidat</a>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Název</th>
+                    <th scope="col">Počet stran</th>
+                    <th scope="col">Půjčeno?</th>
+                    <th scope="col">Kým?</th>
+                    <th scope="col">Upravit</th>
+                    <th scope="col">Smazat</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $books as $item}
+                    <tr>
+                        <td>{$item->id}</td>
+                        <td>{$item->name}</td>
+                        <td>{$item->pages}</td>
+                        <td>{$item->is_borrowed}</td>
+                        <td>{$item->user_id}</td>
+                        <td><a class="btn btn-info" n:href="Homepage:addBook $item->id">O</a></td>
+                        <td><a class="btn btn-danger" n:href="Homepage:deleteBook $item->id">X</a></td>
+                    </tr>
+
+                {/foreach}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+
+
+
+
+{/block}
+
+

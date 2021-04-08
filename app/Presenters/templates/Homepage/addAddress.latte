@@ -1,0 +1,64 @@
+{block content}
+
+    <form n:name="addressForm">
+
+        <div class="row justify-content-center my-5">
+
+            <div n:foreach="$form->errors as $error"
+                    class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{$error}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="col-6">
+
+                <div class="form-group row">
+                    {label street, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="street" class="form-control" type="text">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {label house_number, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="house_number" class="form-control" type="number">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {label postal_code, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="postal_code" class="form-control" type="text">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {label city, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="city" class="form-control" type="text">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {label state, class => [col-12, align-self-center, text-left]}
+                    <div class="col-12">
+                        <input n:name="state" class="form-control" type="text">
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <input n:name="send" type="submit" class="btn btn-success">
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+{/block}
+
+

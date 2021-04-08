@@ -22,3 +22,7 @@ services:
 	- App\Model\AddressFacade
 	- App\Model\BookFacade
 	- App\Model\UserFacade
+	- App\Forms\BaseFormFactory
+	- App\Forms\AddressFormFactory
+	- App\Forms\BookFormFactory
+	- App\Forms\UserFormFactory

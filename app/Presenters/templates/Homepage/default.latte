@@ -1,5 +1,50 @@
 {block content}
 
+    <div class="row justify-content-center">
+        <div class="col-10">
+
+            <h2 class="py-3">Adresy</h2>
+
+            <div class="py-2">
+                <a class="btn btn-success" n:href="Homepage:addAddress">Přidat</a>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Ulice</th>
+                    <th scope="col">ČP</th>
+                    <th scope="col">Město</th>
+                    <th scope="col">PSČ</th>
+                    <th scope="col">Stát</th>
+                    <th scope="col">Upravit</th>
+                    <th scope="col">Smazat</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $address as $item}
+                    <tr>
+                        <td>{$item->id}</td>
+                        <td>{$item->street}</td>
+                        <td>{$item->house_number}</td>
+                        <td>{$item->city}</td>
+                        <td>{$item->postal_code}</td>
+                        <td>{$item->state}</td>
+                        <td><a class="btn btn-info" n:href="Homepage:addAddress $item->id">O</a></td>
+                        <td><a class="btn btn-danger" n:href="Homepage:deleteAddress $item->id">X</a></td>
+                    </tr>
+
+                {/foreach}
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+
+
 
 
 {/block}
