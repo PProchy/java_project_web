@@ -20,8 +20,10 @@
 		"nette/utils": "^3.0",
 		"latte/latte": "^2.5",
 		"tracy/tracy": "^2.6",
-		"uestla/recaptcha-control": "^8.0"
-	},
+		"uestla/recaptcha-control": "^8.0",
+      "ext-curl": "*",
+      "ext-json": "*"
+    },
 	"require-dev": {
 		"nette/tester": "^2.0",
 		"symfony/thanks": "^1"

@@ -6,26 +6,54 @@ namespace App\Presenters;
 
 use Nette;
 use Nette\Application\UI\Form;
-use Nette\Mail\Message;
-use Nette\Mail\SendmailMailer;
 
 
 final class HomepagePresenter extends BasePresenter
 {
     public function renderDefault(): void
     {
-        $this->template->address = $this->addressFacade->getAll();
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/address/read.php");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+        ));
+        $result = curl_exec($curl);
+        curl_close($curl);
+        $result = json_decode($result);
+        $this->template->address = $result;
     }
 
     public function renderBook(): void
     {
-        $this->template->books = $this->bookFacade->getAll();
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/book/read.php");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+        ));
+        $result = curl_exec($curl);
+        curl_close($curl);
+        $result = json_decode($result);
+        $this->template->books = $result;
 
     }
 
     public function renderUser(): void
     {
-        $this->template->people = $this->userFacade->getAll();
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/user/read.php");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+        ));
+        $result = curl_exec($curl);
+        curl_close($curl);
+        $result = json_decode($result);
+        $this->template->people = $result;
     }
 
     public function renderAddAddress($id = null): void
@@ -49,14 +77,22 @@ final class HomepagePresenter extends BasePresenter
      */
     public function actionDeleteBook(int $id): void
     {
-        try {
-            $this->bookFacade->delete($id);
-            $this->flashMessage('Kniha smazána.', 'alert-success');
-            $this->redirect('Homepage:book');
-        } catch (Nette\Database\ConnectionException $e) {
-            $this->flashMessage('Něco se pokazilo. :(', 'alert-danger');
-            $this->redirect('Homepage:book');
-        }
+        $data = array("id" => $id);
+        $dataJson = json_encode($data);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/book/delete.php");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+        ));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+        curl_exec($curl);
+        curl_close($curl);
+
+        $this->flashMessage('Kniha smazána.', 'alert-success');
+        $this->redirect('Homepage:book');
     }
 
     /**
@@ -65,14 +101,22 @@ final class HomepagePresenter extends BasePresenter
      */
     public function actionDeleteUser(int $id): void
     {
-        try {
-            $this->userFacade->delete($id);
-            $this->flashMessage('Uživatel smazán.', 'alert-success');
-            $this->redirect('Homepage:user');
-        } catch (Nette\Database\ConnectionException $e) {
-            $this->flashMessage('Něco se pokazilo. :(', 'alert-danger');
-            $this->redirect('Homepage:user');
-        }
+        $data = array("id" => $id);
+        $dataJson = json_encode($data);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/user/delete.php");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+        ));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+        curl_exec($curl);
+        curl_close($curl);
+
+        $this->flashMessage('Uživatel smazán.', 'alert-success');
+        $this->redirect('Homepage:user');
     }
 
     /**
@@ -81,14 +125,22 @@ final class HomepagePresenter extends BasePresenter
      */
     public function actionDeleteAddress(int $id): void
     {
-        try {
-            $this->addressFacade->delete($id);
-            $this->flashMessage('Uživatel smazán.', 'alert-success');
-            $this->redirect('Homepage:default');
-        } catch (Nette\Database\ConnectionException $e) {
-            $this->flashMessage('Něco se pokazilo. :(', 'alert-danger');
-            $this->redirect('Homepage:default');
-        }
+        $data = array("id" => $id);
+        $dataJson = json_encode($data);
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/address/delete.php");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+        ));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+        curl_exec($curl);
+        curl_close($curl);
+
+        $this->flashMessage('Uživatel smazán.', 'alert-success');
+        $this->redirect('Homepage:default');
     }
 
     /**
@@ -98,7 +150,18 @@ final class HomepagePresenter extends BasePresenter
     {
         $id = $this->presenter->getParameter('id');
         if ($id !== null) {
-            $values = $this->addressFacade->get($id);
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/address/read_single.php?id=" . $id);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+            ));
+            $result = curl_exec($curl);
+            curl_close($curl);
+            $values = json_decode($result);
+
             $form = $this->addressFormFactory->create()->setDefaults($values);
         } else {
             $form = $this->addressFormFactory->create();
@@ -114,7 +177,18 @@ final class HomepagePresenter extends BasePresenter
     {
         $id = $this->presenter->getParameter('id');
         if ($id !== null) {
-            $values = $this->bookFacade->get($id);
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/book/read_single.php?id=" . $id);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+            ));
+            $result = curl_exec($curl);
+            curl_close($curl);
+            $values = json_decode($result);
+
             $form = $this->bookFormFactory->create($this->userFacade)->setDefaults($values);
         } else {
             $form = $this->bookFormFactory->create($this->userFacade);
@@ -130,7 +204,18 @@ final class HomepagePresenter extends BasePresenter
     {
         $id = $this->presenter->getParameter('id');
         if ($id !== null) {
-            $values = $this->userFacade->get($id);
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/user/read_single.php?id=" . $id);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+            ));
+            $result = curl_exec($curl);
+            curl_close($curl);
+            $values = json_decode($result);
+
             $form = $this->userFormFactory->create($this->addressFacade)->setDefaults($values);
         } else {
             $form = $this->userFormFactory->create($this->addressFacade);
@@ -150,9 +235,52 @@ final class HomepagePresenter extends BasePresenter
         (int)$id = $this->presenter->getParameter('id');
         try {
             if (isset($id)) {
-                $this->addressFacade->edit($id, $values);
+
+                $data = array(
+                    "id" => $id,
+                    "street" => $values->street,
+                    "house_number" => $values->house_number,
+                    "postal_code" => $values->postal_code,
+                    "city" => $values->city,
+                    "state" => $values->state,
+
+                );
+                $dataJson = json_encode($data);
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/address/update.php");
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                ));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+                curl_exec($curl);
+                curl_close($curl);
+
             } else {
-                $this->addressFacade->create($values);
+
+                $data = array(
+                    "street" => $values->street,
+                    "house_number" => $values->house_number,
+                    "postal_code" => $values->postal_code,
+                    "city" => $values->city,
+                    "state" => $values->state,
+
+                );
+                $dataJson = json_encode($data);
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/address/create.php");
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                ));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+                curl_exec($curl);
+                curl_close($curl);
+
             }
             $this->flashMessage('Adresa úspěšně vytvořena/upravena.', 'alert-success');
             $this->redirect('Homepage:default');
@@ -173,13 +301,54 @@ final class HomepagePresenter extends BasePresenter
             if (isset($id)) {
                 if ($values->user_id === 'null') {
                     unset($values->user_id);
+                    $values->user_id = "";
                 }
-                $this->bookFacade->edit($id, $values);
+
+                $data = array(
+                    "id" => $id,
+                    "name" => $values->name,
+                    "pages" => $values->pages,
+                    "is_borrowed" => $values->is_borrowed,
+                    "user_id" => $values->user_id
+                );
+                $dataJson = json_encode($data);
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/book/update.php");
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                ));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+                curl_exec($curl);
+                curl_close($curl);
+
             } else {
                 if ($values->user_id === 'null') {
                     unset($values->user_id);
+                    $values->user_id = NULL;
                 }
-                $this->bookFacade->create($values);
+
+                $data = array(
+                    "name" => $values->name,
+                    "pages" => $values->pages,
+                    "is_borrowed" => $values->is_borrowed,
+                    "user_id" => $values->user_id
+                );
+                $dataJson = json_encode($data);
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/book/create.php");
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                ));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+                curl_exec($curl);
+                curl_close($curl);
+
             }
             $this->flashMessage('Kniha úspěšně vytvořena/upravena.', 'alert-success');
             $this->redirect('Homepage:book');
@@ -198,9 +367,48 @@ final class HomepagePresenter extends BasePresenter
         (int)$id = $this->presenter->getParameter('id');
         try {
             if (isset($id)) {
-                $this->userFacade->edit($id, $values);
+
+                $data = array(
+                    "id" => $id,
+                    "name" => $values->name,
+                    "surname" => $values->surname,
+                    "birth" => $values->birth,
+                    "address_id" => $values->address_id
+                );
+                $dataJson = json_encode($data);
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/user/update.php");
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                ));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+                curl_exec($curl);
+                curl_close($curl);
+
             } else {
-                $this->userFacade->create($values);
+
+                $data = array(
+                    "name" => $values->name,
+                    "surname" => $values->surname,
+                    "birth" => $values->birth,
+                    "address_id" => $values->address_id
+                );
+                $dataJson = json_encode($data);
+
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, "http://localhost/projects/java_project/api/user/create.php");
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                ));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $dataJson);
+                curl_exec($curl);
+                curl_close($curl);
+
             }
             $this->flashMessage('Uživatel úspěšně vytvořen/upraven.', 'alert-success');
             $this->redirect('Homepage:user');
@@ -208,8 +416,6 @@ final class HomepagePresenter extends BasePresenter
             $form->addError('Někde se stala chyba, profil nebyl upraven.');
         }
     }
-
-
 
 
 }
