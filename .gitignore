@@ -1,3 +1,4 @@
-app/config/local.neon
+#app/config/local.neon
 vendor/
 .idea/
+temp/
